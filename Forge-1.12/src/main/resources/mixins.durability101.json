@@ -1,0 +1,11 @@
+{
+  "required": true,
+  "minVersion": "0.7.10",
+  "package": "com.shaybox.durability101.mixin",
+  "refmap": "mixins.durability101.refmap.json",
+  "target": "@env(DEFAULT)",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+    "MixinRenderItem"
+  ]
+}

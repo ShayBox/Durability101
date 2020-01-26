@@ -1,0 +1,13 @@
+modLoader="javafml"
+loaderVersion="[25,)"
+issueTrackerURL="https://github.com/durability101/1.13/issues"
+[[mods]]
+modId="durability101"
+version="${file.jarVersion}"
+displayName="Durability101"
+displayURL="https://github.com/durability101/1.13"
+credits="Credit to RedBanHammer"
+authors="ShayBox, RedBanHammer"
+description='''
+Recreation of Durability101 from RedBanHammer
+'''
