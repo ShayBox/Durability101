@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "id": "durability101",
+  "version": "${version}",
+
+  "name": "Durability101",
+  "description": "Recreation of Durability101 from RedBanHammer",
+  "authors": [
+    "ShayBox",
+    "RedBanHammer"
+  ],
+  "contact": {
+    "homepage": "https://shaybox.com/",
+    "sources": "https://github.com/shaybox/durability101"
+  },
+
+  "license": "MIT",
+  "icon": "assets/durability101/icon.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "com.shaybox.durability101.Main"
+    ]
+  },
+  "mixins": [
+    "durability101.mixins.json"
+  ],
+
+  "depends": {
+    "fabricloader": ">=0.7.4",
+    "fabric": "*",
+    "minecraft": "1.16.x"
+  },
+  "suggests": {
+    "flamingo": "*"
+  }
+}
