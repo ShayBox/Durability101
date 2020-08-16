@@ -1,5 +1,6 @@
 modLoader="javafml"
 loaderVersion="[32,)"
+license="MIT license"
 issueTrackerURL="https://github.com/shaybox/durability101/issues"
 [[mods]]
 modId="durability101"
