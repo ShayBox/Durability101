@@ -1,14 +1,14 @@
 modLoader="javafml"
-loaderVersion="[32,)"
-license="MIT license"
-issueTrackerURL="https://github.com/shaybox/durability101/issues"
+loaderVersion="[36,)"
+license="MIT"
+issueTrackerURL="https://github.com/ShayBox/Durability101/issues"
 [[mods]]
 modId="durability101"
-version="${file.jarVersion}"
+version="0.0.4"
 displayName="Durability101"
-displayURL="https://github.com/shaybox/durability101"
+displayURL="https://shaybox.com"
 credits="Credit to RedBanHammer"
-authors="ShayBox, RedBanHammer"
+authors="ShayBox"
 description='''
-Recreation of Durability101 from RedBanHammer
+A rewrite of the original Durability101 mod
 '''

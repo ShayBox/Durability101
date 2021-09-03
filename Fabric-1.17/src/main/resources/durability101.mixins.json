@@ -3,8 +3,6 @@
   "minVersion": "0.8",
   "package": "com.shaybox.durability101.mixin",
   "compatibilityLevel": "JAVA_16",
-  "mixins": [
-  ],
   "client": [
     "ItemRendererMixin"
   ],

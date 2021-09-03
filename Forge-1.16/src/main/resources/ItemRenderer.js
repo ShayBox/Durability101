@@ -13,7 +13,7 @@ function initializeCoreMod() {
                 var methods = classNode.methods;
                 for (m in methods) {
                     var method = methods[m];
-                    if (method.name === "renderItemOverlayIntoGUI" || method.name === "func_180453_a") {
+                    if (method.name === "renderGuiItemDecorations" || method.name === "m_115174_") {
                         var instructions = method.instructions;
                         var firstInstruction = instructions.get(0);
 
@@ -24,9 +24,8 @@ function initializeCoreMod() {
                         instructions.insertBefore(firstInstruction, new VarInsnNode(Opcodes.ILOAD, 4)); // yPosition
 
                         // Method
-                        var renderDurabilityMethod = new MethodInsnNode(Opcodes.INVOKESTATIC, "com/shaybox/durability101/CustomItemRenderer", "renderDurability", "(Lnet/minecraft/client/gui/FontRenderer;Lnet/minecraft/item/ItemStack;II)V", false);
-                        instructions.insertBefore(firstInstruction, renderDurabilityMethod); // renderDurability
-                        break;
+                        var renderDurability101 = new MethodInsnNode(Opcodes.INVOKESTATIC, "com/shaybox/durability101/Main", "renderDurability101", "(Lnet/minecraft/client/gui/FontRenderer;Lnet/minecraft/item/ItemStack;II)V", false);
+                        instructions.insertBefore(firstInstruction, renderDurability101); // renderDurability101
                     }
                 }
                 return classNode;
