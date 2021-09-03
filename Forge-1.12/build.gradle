@@ -1,93 +1,66 @@
 buildscript {
     repositories {
-        jcenter()
-        maven { url = "https://files.minecraftforge.net/maven" }
-        maven {
-            name = "sponge"
-            url = "https://repo.spongepowered.org/maven"
-        }
+        maven { url = 'https://files.minecraftforge.net/maven' }
+        maven { url = 'https://repo.spongepowered.org/repository/maven-public/' }
     }
     dependencies {
-        classpath "net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT"
-        classpath "org.spongepowered:mixingradle:0.6-SNAPSHOT"
-        classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.4'
+        classpath 'net.minecraftforge.gradle:ForgeGradle:3.+'
+        classpath 'org.spongepowered:mixingradle:0.7-SNAPSHOT'
     }
 }
 
-apply plugin: "net.minecraftforge.gradle.forge"
-apply plugin: "org.spongepowered.mixin"
-apply plugin: 'com.github.johnrengelman.shadow'
+apply plugin: 'net.minecraftforge.gradle'
+apply plugin: 'org.spongepowered.mixin'
 
-version = "0.0.3"
-group = "com.shaybox.durability101"
-archivesBaseName = "durability101"
+version = '0.0.4'
+group = 'com.shaybox.durability101'
+archivesBaseName = 'durability101'
 
-sourceCompatibility = targetCompatibility = "1.8"
-compileJava {
-    sourceCompatibility = targetCompatibility = "1.8"
-}
+sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
 
 minecraft {
-    version = "1.12.2-14.23.5.2838"
-    runDir = "run"
-    mappings = "snapshot_20171003"
+    mappings channel: 'snapshot', version: '20180814-1.12'
+
+    runs {
+        client {
+            workingDirectory project.file('run')
+
+            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+            property 'forge.logging.console.level', 'debug'
+
+            jvmArg "-Dfml.coreMods.load=com.shaybox.durability101.LoadingPlugin"
+        }
+    }
 }
 
 repositories {
-    maven {
-        name = "sponge"
-        url = "https://repo.spongepowered.org/maven"
-    }
+    maven { url = 'https://repo.spongepowered.org/repository/maven-public/' }
 }
 
 dependencies {
-    compile("org.spongepowered:mixin:0.7.11-SNAPSHOT") {
-        exclude module: "launchwrapper"
-        exclude module: "guava"
-        exclude module: "gson"
-        exclude module: "commons-io"
-    }
-}
+    minecraft 'net.minecraftforge:forge:1.12.2-14.23.5.2854'
 
-processResources {
-    inputs.property "version", project.version
-    inputs.property "mcversion", project.minecraft.version
-
-    from(sourceSets.main.resources.srcDirs) {
-        include "mcmod.info"
-                
-        expand "version":project.version, "mcversion":project.minecraft.version
-    }
-        
-    from(sourceSets.main.resources.srcDirs) {
-        exclude "mcmod.info"
-    }
-}
-
-runClient {
-    args = ["--mixin", "mixins.durability101.json", "--tweakClass", "org.spongepowered.asm.launch.MixinTweaker"]
-}
-
-sourceSets {
-    main {
-        ext.refMap = "mixins.durability101.refmap.json"
-    }
+    compile "org.spongepowered:mixin:0.8.2"
 }
 
 jar {
-    manifest.attributes(
-            "TweakClass": "org.spongepowered.asm.launch.MixinTweaker",
-            "MixinConfigs": "mixins.durability101.json",
-            "FMLCorePluginContainsFMLMod": "true",
-            "ForceLoadAsMod": "true"
-    )
+    from {
+        configurations.compile
+                .filter { "mixin-0.8.2.jar" == it.name }
+                .collect { it.isDirectory() ? it : zipTree(it) }
+    } {
+        exclude "LICENSE.txt", "META-INF/MANIFSET.MF", "META-INF/maven/**", "META-INF/*.RSA", "META-INF/*.SF"
+    }
+
+    manifest {
+        attributes([
+            "FMLCorePluginContainsFMLMod": true,
+            "ForceLoadAsMod"             : true,
+            "MixinConfigs"               : "mixin.durability101.json",
+            "TweakClass"                 : "org.spongepowered.asm.launch.MixinTweaker",
+            "TweakOrder"                 : 0
+        ])
+    }
 }
 
-shadowJar {
-    exclude('dummyThing')
-    classifier ''
-}
-
-reobf {
-    shadowJar{}
-}
+jar.finalizedBy('reobfJar')

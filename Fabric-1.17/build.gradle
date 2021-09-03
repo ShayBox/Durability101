@@ -39,16 +39,3 @@ jar {
 		rename { "${it}_${project.archivesBaseName}"}
 	}
 }
-
-publishing {
-	publications {
-		mavenJava(MavenPublication) {
-			artifact(remapJar) {
-				builtBy remapJar
-			}
-			artifact(sourcesJar) {
-				builtBy remapSourcesJar
-			}
-		}
-	}
-}

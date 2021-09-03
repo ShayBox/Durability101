@@ -1,0 +1,7 @@
+{
+  "compatibilityLevel": "JAVA_8",
+  "package": "com.shaybox.durability101.mixin",
+  "client": [
+    "RenderItemMixin"
+  ]
+}
