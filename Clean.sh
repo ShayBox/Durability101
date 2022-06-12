@@ -9,6 +9,6 @@ do
 
     # Gradle clean
     cd $dir
-    rm -rf build logs
+    rm -rf build logs run
     cd ..
 done
