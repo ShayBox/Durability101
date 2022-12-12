@@ -10,7 +10,7 @@ do
 
     # Detect java version
     case $dir in
-        Forge-1.12 | Forge-1.13 | Forge-1.14 | Forge-1.15)
+        Forge-1.12 | Forge-1.13 | Forge-1.14 | Forge-1.15 | Fabric-1.14 | Fabric-1.15)
             export PATH="/usr/lib/jvm/java-8-openjdk/bin/:$PATH"
             ;;
         *)
