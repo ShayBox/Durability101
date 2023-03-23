@@ -8,18 +8,19 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraftforge.fml.common.Mod;
+import oshi.hardware.Display;
 
 import java.text.DecimalFormat;
 
 @Mod("durability101")
 public class Main {
 
-    public static void renderDurability101(Font font, ItemStack stack, int xPosition, int yPosition) {
+    public static void renderDurability101(PoseStack poseStack, Font font, ItemStack stack, int xPosition, int yPosition) {
         if (!stack.isEmpty() && stack.isDamaged()) {
             // ItemStack information
             int damage = stack.getDamageValue();
             int maxDamage = stack.getMaxDamage();
-            int unbreaking = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.UNBREAKING, stack);
+            int unbreaking = EnchantmentHelper.getTagEnchantmentLevel(Enchantments.UNBREAKING, stack);
 
             // Create string, position, and color
             String string = format(((maxDamage - damage) * (unbreaking + 1)));
@@ -29,12 +30,13 @@ public class Main {
             int color = stack.getItem().getBarColor(stack);
 
             // Draw string
-            PoseStack posestack = new PoseStack();
-            posestack.scale(0.5F, 0.5F, 0.5F);
-            posestack.translate(0.0D, 0.0D, 750.0F);
+            poseStack.pushPose();
+            poseStack.scale(0.5F, 0.5F, 0.5F);
+            poseStack.translate(0.0D, 0.0D, 750.0F);
             MultiBufferSource.BufferSource multibuffersource$buffersource = MultiBufferSource.immediate(Tesselator.getInstance().getBuilder());
-            font.drawInBatch(string, x, y, color, true, posestack.last().pose(), multibuffersource$buffersource, false, 0, 15728880);
+            font.drawInBatch(string, x, y, color, true, poseStack.last().pose(), multibuffersource$buffersource, Font.DisplayMode.NORMAL, 0, 15728880, false);
             multibuffersource$buffersource.endBatch();
+            poseStack.popPose();
         }
     }
 

@@ -13,18 +13,19 @@ function initializeCoreMod() {
                 var methods = classNode.methods;
                 for (m in methods) {
                     var method = methods[m];
-                    if (method.name === "renderGuiItemDecorations" || method.name === "m_115174_") {
+                    if (method.name === "renderGuiItemDecorations" || method.name === "m_274364_") {
                         var instructions = method.instructions;
                         var firstInstruction = instructions.get(0);
 
                         // Parameters
-                        instructions.insertBefore(firstInstruction, new VarInsnNode(Opcodes.ALOAD, 1)); // Font
-                        instructions.insertBefore(firstInstruction, new VarInsnNode(Opcodes.ALOAD, 2)); // ItemStack
-                        instructions.insertBefore(firstInstruction, new VarInsnNode(Opcodes.ILOAD, 3)); // xPosition
-                        instructions.insertBefore(firstInstruction, new VarInsnNode(Opcodes.ILOAD, 4)); // yPosition
+                        instructions.insertBefore(firstInstruction, new VarInsnNode(Opcodes.ALOAD, 1)); // PoseStack
+                        instructions.insertBefore(firstInstruction, new VarInsnNode(Opcodes.ALOAD, 2)); // Font
+                        instructions.insertBefore(firstInstruction, new VarInsnNode(Opcodes.ALOAD, 3)); // ItemStack
+                        instructions.insertBefore(firstInstruction, new VarInsnNode(Opcodes.ILOAD, 4)); // xPosition
+                        instructions.insertBefore(firstInstruction, new VarInsnNode(Opcodes.ILOAD, 5)); // yPosition
 
                         // Method
-                        var renderDurability101 = new MethodInsnNode(Opcodes.INVOKESTATIC, "com/shaybox/durability101/Main", "renderDurability101", "(Lnet/minecraft/client/gui/Font;Lnet/minecraft/world/item/ItemStack;II)V", false);
+                        var renderDurability101 = new MethodInsnNode(Opcodes.INVOKESTATIC, "com/shaybox/durability101/Main", "renderDurability101", "(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/gui/Font;Lnet/minecraft/world/item/ItemStack;II)V", false);
                         instructions.insertBefore(firstInstruction, renderDurability101); // renderDurability101
                     }
                 }
