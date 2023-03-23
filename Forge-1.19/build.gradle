@@ -11,7 +11,7 @@ archivesBaseName = 'durability101'
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 minecraft {
-    mappings channel: 'official', version: '1.19.3'
+    mappings channel: 'official', version: '1.19.4'
 
     runs {
         client {
@@ -33,7 +33,7 @@ minecraft {
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.19.3-44.0.10'
+    minecraft 'net.minecraftforge:forge:1.19.4-45.0.19'
 }
 
 jar.finalizedBy('reobfJar')

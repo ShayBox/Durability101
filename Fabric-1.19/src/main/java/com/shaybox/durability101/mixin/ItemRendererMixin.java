@@ -18,12 +18,12 @@ import java.text.DecimalFormat;
 @Mixin(ItemRenderer.class)
 public class ItemRendererMixin {
 
-	@Inject(at = @At("RETURN"), method = "renderGuiItemOverlay(Lnet/minecraft/client/font/TextRenderer;Lnet/minecraft/item/ItemStack;IILjava/lang/String;)V")
-	public void renderGuiItemOverlay(TextRenderer renderer, ItemStack stack, int x, int y, String countLabel, CallbackInfo ci) {
-		renderDurability101(renderer, stack, x, y);
+	@Inject(at = @At("RETURN"), method = "renderGuiItemOverlay(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/font/TextRenderer;Lnet/minecraft/item/ItemStack;IILjava/lang/String;)V")
+	public void renderGuiItemOverlay(MatrixStack matrices, TextRenderer textRenderer, ItemStack stack, int x, int y, String countLabel, CallbackInfo ci) {
+		renderDurability101(matrices, textRenderer, stack, x, y);
 	}
 
-	public void renderDurability101(TextRenderer renderer, ItemStack stack, int xPosition, int yPosition) {
+	public void renderDurability101(MatrixStack matrices, TextRenderer renderer, ItemStack stack, int xPosition, int yPosition) {
 		if (!stack.isEmpty() && stack.isDamaged()) {
 			// ItemStack information
 			int damage = stack.getDamage();
@@ -38,12 +38,13 @@ public class ItemRendererMixin {
 			int color = stack.getItem().getItemBarColor(stack);
 
 			// Draw string
-			MatrixStack matrixStack = new MatrixStack();
-			matrixStack.scale(0.5F, 0.5F, 0.5F);
-			matrixStack.translate(0.0D, 0.0D, 750.0F);
+			matrices.push();
+			matrices.scale(0.5F, 0.5F, 0.5F);
+			matrices.translate(0.0D, 0.0D, 750.0F);
 			VertexConsumerProvider.Immediate immediate = VertexConsumerProvider.immediate(Tessellator.getInstance().getBuffer());
-			renderer.draw(string, x, y, color, true, matrixStack.peek().getPositionMatrix(), immediate, false, 0, 15728880);
+			renderer.draw(string, x, y, color, true, matrices.peek().getPositionMatrix(), immediate, TextRenderer.TextLayerType.NORMAL, 0, 15728880, false);
 			immediate.draw();
+			matrices.pop();
 		}
 	}
 
