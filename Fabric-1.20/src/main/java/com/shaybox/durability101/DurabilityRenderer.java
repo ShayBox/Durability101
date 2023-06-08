@@ -10,7 +10,7 @@ import net.minecraft.item.ItemStack;
 import java.text.DecimalFormat;
 
 public class DurabilityRenderer {
-    public static void renderDurability101(MatrixStack matrices, net.minecraft.client.font.TextRenderer renderer, ItemStack stack, int xPosition, int yPosition, boolean b) {
+    public static void renderDurability101(MatrixStack matrices, net.minecraft.client.font.TextRenderer renderer, ItemStack stack, int xPosition, int yPosition) {
         if (!stack.isEmpty() && stack.isDamaged()) {
             // ItemStack information
             int damage = stack.getDamage();
@@ -29,8 +29,6 @@ public class DurabilityRenderer {
             matrices.scale(0.5F, 0.5F, 0.5F);
             matrices.translate(0.0D, 0.0D, 750.0F);
             VertexConsumerProvider.Immediate immediate = VertexConsumerProvider.immediate(Tessellator.getInstance().getBuffer());
-            if(b) System.out.println(x);
-            if(b) System.out.println(y);
             renderer.draw(string, x, y, color, true, matrices.peek().getPositionMatrix(), immediate, net.minecraft.client.font.TextRenderer.TextLayerType.NORMAL, 0, 15728880, false);
             immediate.draw();
             matrices.pop();

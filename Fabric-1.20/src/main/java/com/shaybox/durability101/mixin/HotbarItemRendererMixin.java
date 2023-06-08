@@ -17,6 +17,6 @@ public abstract class HotbarItemRendererMixin {
 
 	@Inject(at = @At("RETURN"), method = "Lnet/minecraft/client/gui/DrawContext;drawItemInSlot(Lnet/minecraft/client/font/TextRenderer;Lnet/minecraft/item/ItemStack;II)V")
 	    public void renderSlotItemOverlay(TextRenderer textRenderer, ItemStack stack, int x, int y, CallbackInfo ci){
-			DurabilityRenderer.renderDurability101(this.getMatrices(),textRenderer,stack,x,y,false);
+			DurabilityRenderer.renderDurability101(this.getMatrices(),textRenderer,stack,x,y);
 	}
 }

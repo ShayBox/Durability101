@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class ItemRendererMixin {
 	@Inject(at = @At("RETURN"), method = "Lnet/minecraft/client/gui/screen/ingame/HandledScreen;drawSlot(Lnet/minecraft/client/gui/DrawContext;Lnet/minecraft/screen/slot/Slot;)V")
 	public void drawSlot(DrawContext context, Slot slot, CallbackInfo ci){
-		DurabilityRenderer.renderDurability101(context.getMatrices(),MinecraftClient.getInstance().textRenderer, slot.getStack(),slot.x,slot.y,true);
+		DurabilityRenderer.renderDurability101(context.getMatrices(),MinecraftClient.getInstance().textRenderer, slot.getStack(),slot.x,slot.y);
 	}
 
 
