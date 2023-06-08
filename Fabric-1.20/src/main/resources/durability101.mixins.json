@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.shaybox.durability101.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "client": [
+    "ItemRendererMixin",
+    "HotbarItemRendererMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
