@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "id": "durability101",
+  "version": "0.0.5",
+  "name": "Durability101",
+  "description": "A rewrite of the original Durability101 mod",
+  "authors": [
+    "ShayBox",
+    "RedBanHammer"
+  ],
+  "contact": {
+    "homepage": "https://shaybox.com",
+    "sources": "https://github.com/ShayBox/Durability101"
+  },
+  "license": "MIT",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "com.shaybox.durability101.Main"
+    ]
+  },
+  "accessWidener" : "durability101.accesswidener",
+  "mixins": [
+    "durability101.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.14.21",
+    "fabric": "*",
+    "minecraft": "~1.20",
+    "java": ">=17"
+  }
+}
