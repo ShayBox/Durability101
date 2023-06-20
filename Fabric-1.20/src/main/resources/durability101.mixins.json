@@ -4,8 +4,7 @@
   "package": "com.shaybox.durability101.mixin",
   "compatibilityLevel": "JAVA_17",
   "client": [
-    "ItemRendererMixin",
-    "HotbarItemRendererMixin"
+    "DrawContextMixin"
   ],
   "injectors": {
     "defaultRequire": 1

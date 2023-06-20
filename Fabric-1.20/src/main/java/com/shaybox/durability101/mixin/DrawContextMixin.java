@@ -1,16 +1,33 @@
-package com.shaybox.durability101;
+package com.shaybox.durability101.mixin;
 
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.font.TextRenderer;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.item.ItemStack;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.text.DecimalFormat;
 
-public class DurabilityRenderer {
-    public static void renderDurability101(MatrixStack matrices, net.minecraft.client.font.TextRenderer renderer, ItemStack stack, int xPosition, int yPosition) {
+@Mixin(DrawContext.class)
+public abstract class DrawContextMixin {
+    @Shadow
+    public abstract MatrixStack getMatrices();
+
+    @Inject(at = @At("RETURN"), method = "drawItemInSlot(Lnet/minecraft/client/font/TextRenderer;Lnet/minecraft/item/ItemStack;IILjava/lang/String;)V")
+    public void drawItemInSlot(TextRenderer textRenderer, ItemStack stack, int x, int y, String countOverride, CallbackInfo ci) {
+        renderDurability101(this.getMatrices(), MinecraftClient.getInstance().textRenderer, stack, x, y);
+    }
+
+    public void renderDurability101(MatrixStack matrices, TextRenderer renderer, ItemStack stack, int xPosition, int yPosition) {
         if (!stack.isEmpty() && stack.isDamaged()) {
             // ItemStack information
             int damage = stack.getDamage();
@@ -35,7 +52,7 @@ public class DurabilityRenderer {
         }
     }
 
-    public static String format(float number) {
+    public String format(float number) {
         DecimalFormat decimalFormat = new DecimalFormat("0.#");
 
         if (number >= 1000000000) return decimalFormat.format(number / 1000000000) + "b";

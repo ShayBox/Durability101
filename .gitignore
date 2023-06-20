@@ -1,6 +1,5 @@
-.gradle/
-.idea/
-build/
-jars/
-logs/
-run/
+**/.gradle/
+**/.idea/
+**/.vscode/
+**/build/
+**/run/
