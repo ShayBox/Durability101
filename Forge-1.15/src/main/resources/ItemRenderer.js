@@ -13,7 +13,7 @@ function initializeCoreMod() {
                 var methods = classNode.methods;
                 for (m in methods) {
                     var method = methods[m];
-                    if (method.name === "renderItemOverlayIntoGUI" || method.name === "func_180453_a") {
+                    if (method.name === "renderGuiItemDecorations" || method.name === "func_175030_a") {
                         var instructions = method.instructions;
                         var firstInstruction = instructions.get(0);
 
@@ -26,7 +26,6 @@ function initializeCoreMod() {
                         // Method
                         var renderDurability101 = new MethodInsnNode(Opcodes.INVOKESTATIC, "com/shaybox/durability101/Main", "renderDurability101", "(Lnet/minecraft/client/gui/FontRenderer;Lnet/minecraft/item/ItemStack;II)V", false);
                         instructions.insertBefore(firstInstruction, renderDurability101); // renderDurability101
-                        break;
                     }
                 }
                 return classNode;

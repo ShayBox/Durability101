@@ -13,7 +13,7 @@ function initializeCoreMod() {
                 var methods = classNode.methods;
                 for (m in methods) {
                     var method = methods[m];
-                    if (method.name === "renderGuiItemDecorations" || method.name === "func_180453_a") {
+                    if (method.name === "renderGuiItemDecorations" || method.name === "func_175030_a") {
                         var instructions = method.instructions;
                         var firstInstruction = instructions.get(0);
 

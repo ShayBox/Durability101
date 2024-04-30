@@ -1,0 +1,34 @@
+{
+	"schemaVersion": 1,
+	"id": "durability101",
+	"version": "${version}",
+	"name": "Durability101",
+	"description": "A rewrite of the original Durability101 mod",
+	"authors": [
+		"ShayBox",
+		"RedBanHammer"
+	],
+	"contact": {
+		"homepage": "https://www.curseforge.com/minecraft/mc-mods/durability101",
+		"sources": "https://github.com/ShayBox/Durability101"
+	},
+	"license": "MIT",
+	"icon": "assets/durability101/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"client": [
+          "com.shaybox.durability101.Main"
+		]
+	},
+	"mixins": [
+		{
+			"config": "durability101.client.mixins.json",
+			"environment": "client"
+		}
+	],
+	"depends": {
+		"fabricloader": ">=0.12",
+		"minecraft": "1.19.4",
+		"java": ">=17"
+	}
+}

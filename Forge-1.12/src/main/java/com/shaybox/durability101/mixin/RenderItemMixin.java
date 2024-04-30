@@ -16,8 +16,8 @@ import java.text.DecimalFormat;
 @Mixin(RenderItem.class)
 public class RenderItemMixin {
 
-    @Inject(at = @At("RETURN"), method = "renderItemOverlayIntoGUI")
-    public void initGui(FontRenderer fr, ItemStack stack, int xPosition, int yPosition, String text, CallbackInfo ci) {
+    @Inject(at = @At("RETURN"), method = "renderItemOverlayIntoGUI(Lnet/minecraft/client/gui/FontRenderer;Lnet/minecraft/item/ItemStack;IILjava/lang/String;)V")
+    public void renderItemOverlayIntoGUI(FontRenderer fr, ItemStack stack, int xPosition, int yPosition, String text, CallbackInfo ci) {
         renderDurability101(fr, stack, xPosition, yPosition, text);
     }
 

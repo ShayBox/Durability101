@@ -1,30 +1,30 @@
 {
-  "schemaVersion": 1,
-  "id": "durability101",
-  "version": "0.0.4",
-  "name": "Durability101",
-  "description": "A rewrite of the original Durability101 mod",
-  "authors": [
-    "ShayBox",
-    "RedBanHammer"
-  ],
-  "contact": {
-    "homepage": "https://shaybox.com",
-    "sources": "https://github.com/ShayBox/Durability101"
-  },
-  "license": "MIT",
-  "environment": "*",
-  "entrypoints": {
-    "main": [
-      "com.shaybox.durability101.Main"
-    ]
-  },
-  "mixins": [
-    "durability101.mixins.json"
-  ],
-  "depends": {
-    "fabricloader": ">=0.4.0",
-    "fabric": "*",
-    "minecraft": "1.14.x"
-  }
+	"schemaVersion": 1,
+	"id": "durability101",
+	"version": "${version}",
+	"name": "Durability101",
+	"description": "A rewrite of the original Durability101 mod",
+	"authors": [
+		"ShayBox",
+		"RedBanHammer"
+	],
+	"contact": {
+		"homepage": "https://www.curseforge.com/minecraft/mc-mods/durability101",
+		"sources": "https://github.com/ShayBox/Durability101"
+	},
+	"license": "MIT",
+	"icon": "assets/durability101/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"com.shaybox.durability101.Main"
+		]
+	},
+	"mixins": [
+		"durability101.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.5",
+		"minecraft": "1.14.x"
+	}
 }

@@ -9,32 +9,32 @@ import net.minecraftforge.fml.common.Mod;
 
 import java.text.DecimalFormat;
 
-@Mod("durability101")
+@Mod(Main.MODID)
 public class Main {
 
-    public static void renderDurability101(FontRenderer fr, ItemStack stack, int xPosition, int yPosition) {
-        if (!stack.isEmpty() && stack.isDamaged()) {
-            GlStateManager.disableLighting();
-            GlStateManager.disableDepthTest();
-            GlStateManager.disableAlphaTest();
-            GlStateManager.disableBlend();
-            GlStateManager.scalef(0.5F, 0.5F, 0.5F);
+    public static final String MODID = "durability101";
 
+    public static void renderDurability101(FontRenderer font, ItemStack stack, int xPosition, int yPosition) {
+        if (!stack.isEmpty() && stack.isDamaged()) {
             // ItemStack information
-            int damage = stack.getDamage();
+            int damage = stack.getDamageValue();
             int maxDamage = stack.getMaxDamage();
-            int unbreaking = EnchantmentHelper.getEnchantmentLevel(Enchantments.UNBREAKING, stack);
+            int unbreaking = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.UNBREAKING, stack);
 
             // Create string, position, and color
             String string = format(((maxDamage - damage) * (unbreaking + 1)));
-            int stringWidth = fr.getStringWidth(string);
+            int stringWidth = font.width(string);
             int x = ((xPosition + 8) * 2 + 1 + stringWidth / 2 - stringWidth);
             int y = (yPosition * 2) + 18;
             int color = stack.getItem().getRGBDurabilityForDisplay(stack);
 
             // Draw string
-            fr.drawStringWithShadow(string, x, y, color);
-
+            GlStateManager.disableLighting();
+            GlStateManager.disableDepthTest();
+            GlStateManager.disableAlphaTest();
+            GlStateManager.disableBlend();
+            GlStateManager.scalef(0.5F, 0.5F, 0.5F);
+            font.drawShadow(string, x, y, color);
             GlStateManager.scalef(2.0F, 2.0F, 2.0F);
             GlStateManager.enableBlend();
             GlStateManager.enableAlphaTest();

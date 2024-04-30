@@ -1,12 +1,13 @@
 [
 {
-  "modid": "durability101",
-  "name": "Durability101",
-  "description": "A rewrite of the original Durability101 mod",
-  "version": "0.0.4",
-  "mcversion": "1.12",
-  "url": "https://shaybox.com",
-  "authorList": ["ShayBox"],
-  "credits": "Credit to RedBanHammer"
+  "modid": "${mod_id}",
+  "name": "${mod_name}",
+  "description": "${mod_description}",
+  "version": "${mod_version}",
+  "mcversion": "${minecraft_version_range}",
+  "url": "https://www.curseforge.com/minecraft/mc-mods/${mod_id}",
+  "authorList": ${mod_authors},
+  "credits": "Credit to RedBanHammer",
+  "logoFile": "assets/${mod_id}/icon.png"
 }
 ]
