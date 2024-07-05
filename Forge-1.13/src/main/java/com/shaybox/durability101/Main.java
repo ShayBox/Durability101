@@ -14,27 +14,29 @@ public class Main {
 
     public static final String MODID = "durability101";
 
-    public static void renderDurability101(FontRenderer font, ItemStack stack, int xPosition, int yPosition) {
-        if (!stack.isEmpty() && stack.isDamaged()) {
+    public static void renderDurability101(FontRenderer fontRenderer, ItemStack itemStack, int xPosition, int yPosition) {
+        if (!itemStack.isEmpty() && itemStack.isDamaged()) {
             // ItemStack information
-            int damage = stack.getDamage();
-            int maxDamage = stack.getMaxDamage();
-            int unbreaking = EnchantmentHelper.getEnchantmentLevel(Enchantments.UNBREAKING, stack);
+            int unbreaking = EnchantmentHelper.getEnchantmentLevel(Enchantments.UNBREAKING, itemStack);
+            int maxDamage = itemStack.getMaxDamage();
+            int damage = itemStack.getDamage();
 
             // Create string, position, and color
             String string = format(((maxDamage - damage) * (unbreaking + 1)));
-            int stringWidth = font.getStringWidth(string);
+            int stringWidth = fontRenderer.getStringWidth(string);
             int x = ((xPosition + 8) * 2 + 1 + stringWidth / 2 - stringWidth);
             int y = (yPosition * 2) + 18;
-            int color = stack.getItem().getRGBDurabilityForDisplay(stack);
+            int color = itemStack.getItem().getRGBDurabilityForDisplay(itemStack);
 
-            // Draw string
             GlStateManager.disableLighting();
             GlStateManager.disableDepthTest();
             GlStateManager.disableAlphaTest();
             GlStateManager.disableBlend();
             GlStateManager.scalef(0.5F, 0.5F, 0.5F);
-            font.drawStringWithShadow(string, x, y, color);
+
+            // Draw string
+            fontRenderer.drawStringWithShadow(string, x, y, color);
+
             GlStateManager.scalef(2.0F, 2.0F, 2.0F);
             GlStateManager.enableBlend();
             GlStateManager.enableAlphaTest();

@@ -1,11 +1,17 @@
 package com.shaybox.durability101.mixin.client;
 
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.client.world.ClientWorld;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.item.ItemStack;
+import net.minecraft.registry.DynamicRegistryManager;
+import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.entry.RegistryEntry;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -22,6 +28,10 @@ public abstract class DrawContextMixin {
 
     @Shadow
     @Final
+    private MinecraftClient client;
+
+    @Shadow
+    @Final
     private MatrixStack matrices;
 
     @Shadow
@@ -33,29 +43,32 @@ public abstract class DrawContextMixin {
     }
 
     @Unique
-    public void renderDurability101(TextRenderer textRenderer, ItemStack itemStack, int xPosition, int yPosition) {
-        if (!itemStack.isEmpty() && itemStack.isDamaged()) {
-            // ItemStack information
-            int unbreaking = EnchantmentHelper.getLevel(Enchantments.UNBREAKING, itemStack);
-            int maxDamage = itemStack.getMaxDamage();
-            int damage = itemStack.getDamage();
+    public void renderDurability101(TextRenderer renderer, ItemStack itemStack, int xPosition, int yPosition) {
+        final ClientWorld world = this.client.world;
+        if (world == null || itemStack.isEmpty() || !itemStack.isDamaged()) return;
 
-            // Create string, position, and color
-            String string = format(((maxDamage - damage) * (unbreaking + 1)));
-            int stringWidth = textRenderer.getWidth(string);
-            int x = ((xPosition + 8) * 2 + 1 + stringWidth / 2 - stringWidth);
-            int y = (yPosition * 2) + 18;
-            int color = itemStack.getItem().getItemBarColor(itemStack);
+        // ItemStack Information
+        DynamicRegistryManager registryManager = world.getRegistryManager();
+        RegistryEntry.Reference<Enchantment> unbreaking = registryManager.get(RegistryKeys.ENCHANTMENT).getEntry(Enchantments.UNBREAKING).orElseThrow();
+        int unbreakingLevel = EnchantmentHelper.getLevel(unbreaking, itemStack);
+        int maxDamage = itemStack.getMaxDamage();
+        int damage = itemStack.getDamage();
 
-            this.matrices.push();
-            this.matrices.scale(0.5F, 0.5F, 0.5F);
-            this.matrices.translate(0.0F, 0.0F, 301.0F);
+        // Create string, position, and color
+        String string = format(((maxDamage - damage) * (unbreakingLevel + 1)));
+        int stringWidth = renderer.getWidth(string);
+        int x = ((xPosition + 8) * 2 + 1 + stringWidth / 2 - stringWidth);
+        int y = (yPosition * 2) + 18;
+        int color = itemStack.getItem().getItemBarColor(itemStack);
 
-            // Draw string
-            this.drawText(textRenderer, string, x, y, color, true);
+        this.matrices.push();
+        this.matrices.scale(0.5F, 0.5F, 0.5F);
+        this.matrices.translate(0.0F, 0.0F, 301.0F);
 
-            this.matrices.pop();
-        }
+        // Draw string
+        this.drawText(renderer, string, x, y, color, true);
+
+        this.matrices.pop();
     }
 
     @Unique

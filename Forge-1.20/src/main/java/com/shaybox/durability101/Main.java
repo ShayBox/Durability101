@@ -35,29 +35,31 @@ public class Main {
 
     private static class Durability101 implements IItemDecorator {
 
-        public boolean render(GuiGraphics guiGraphics, Font font, ItemStack stack, int xPosition, int yPosition) {
-            if (!stack.isEmpty() && stack.isDamaged()) {
+        public boolean render(GuiGraphics guiGraphics, Font font, ItemStack itemStack, int xPosition, int yPosition) {
+            if (!itemStack.isEmpty() && itemStack.isDamaged()) {
                 PoseStack poseStack = guiGraphics.pose();
 
                 // ItemStack information
-                int damage = stack.getDamageValue();
-                int maxDamage = stack.getMaxDamage();
-                int unbreaking = EnchantmentHelper.getTagEnchantmentLevel(Enchantments.UNBREAKING, stack);
+                int unbreaking = EnchantmentHelper.getTagEnchantmentLevel(Enchantments.UNBREAKING, itemStack);
+                int maxDamage = itemStack.getMaxDamage();
+                int damage = itemStack.getDamageValue();
 
                 // Create string, position, and color
                 String string = format(((maxDamage - damage) * (unbreaking + 1)));
                 int stringWidth = font.width(string);
                 int x = ((xPosition + 8) * 2 + 1 + stringWidth / 2 - stringWidth);
                 int y = (yPosition * 2) + 18;
-                int color = stack.getItem().getBarColor(stack);
+                int color = itemStack.getItem().getBarColor(itemStack);
 
-                // Draw string
                 poseStack.pushPose();
                 poseStack.scale(0.5F, 0.5F, 0.5F);
-                poseStack.translate(0.0D, 0.0D, 750.0F);
+                poseStack.translate(0.0F, 0.0F, 301.0F);
+
+                // Draw string
                 MultiBufferSource.BufferSource multibuffersource$buffersource = MultiBufferSource.immediate(Tesselator.getInstance().getBuilder());
                 font.drawInBatch(string, x, y, color, true, poseStack.last().pose(), multibuffersource$buffersource, Font.DisplayMode.NORMAL, 0, 15728880, false);
                 multibuffersource$buffersource.endBatch();
+
                 poseStack.popPose();
             }
 

@@ -16,28 +16,30 @@ public class Main {
 
     public static final String MODID = "durability101";
 
-    public static void renderDurability101(FontRenderer font, ItemStack stack, int xPosition, int yPosition) {
-        if (!stack.isEmpty() && stack.isDamaged()) {
+    public static void renderDurability101(FontRenderer fontRenderer, ItemStack itemStack, int xPosition, int yPosition) {
+        if (!itemStack.isEmpty() && itemStack.isDamaged()) {
             // ItemStack information
-            int damage = stack.getDamageValue();
-            int maxDamage = stack.getMaxDamage();
-            int unbreaking = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.UNBREAKING, stack);
+            int unbreaking = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.UNBREAKING, itemStack);
+            int maxDamage = itemStack.getMaxDamage();
+            int damage = itemStack.getDamageValue();
 
             // Create string, position, and color
             String string = format(((maxDamage - damage) * (unbreaking + 1)));
-            int stringWidth = font.width(string);
+            int stringWidth = fontRenderer.width(string);
             int x = ((xPosition + 8) * 2 + 1 + stringWidth / 2 - stringWidth);
             int y = (yPosition * 2) + 18;
-            int color = stack.getItem().getRGBDurabilityForDisplay(stack);
+            int color = itemStack.getItem().getRGBDurabilityForDisplay(itemStack);
 
-            // Draw string
             MatrixStack matrixStack = new MatrixStack();
             matrixStack.pushPose();
             matrixStack.scale(0.5F, 0.5F, 0.5F);
-            matrixStack.translate(0.0D, 0.0D, 750.0F);
+            matrixStack.translate(0.0F, 0.0F, 701.0F);
+
+            // Draw string
             IRenderTypeBuffer.Impl irendertypebuffer$impl = IRenderTypeBuffer.immediate(Tessellator.getInstance().getBuilder());
-            font.drawInBatch(string, x, y, color, true, matrixStack.last().pose(), irendertypebuffer$impl, false, 0, 15728880);
+            fontRenderer.drawInBatch(string, x, y, color, true, matrixStack.last().pose(), irendertypebuffer$impl, false, 0, 15728880);
             irendertypebuffer$impl.endBatch();
+
             matrixStack.popPose();
         }
     }

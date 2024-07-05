@@ -7,6 +7,7 @@ import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.init.Enchantments;
 import net.minecraft.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -17,11 +18,12 @@ import java.text.DecimalFormat;
 public class RenderItemMixin {
 
     @Inject(at = @At("RETURN"), method = "renderItemOverlayIntoGUI(Lnet/minecraft/client/gui/FontRenderer;Lnet/minecraft/item/ItemStack;IILjava/lang/String;)V")
-    public void renderItemOverlayIntoGUI(FontRenderer fr, ItemStack stack, int xPosition, int yPosition, String text, CallbackInfo ci) {
-        renderDurability101(fr, stack, xPosition, yPosition, text);
+    public void renderItemOverlayIntoGUI(FontRenderer fontRenderer, ItemStack itemStack, int x, int y, String count, CallbackInfo ci) {
+        renderDurability101(fontRenderer, itemStack, x, y);
     }
 
-    public void renderDurability101(FontRenderer fr, ItemStack stack, int xPosition, int yPosition, String text) {
+    @Unique
+    public void renderDurability101(FontRenderer fr, ItemStack stack, int xPosition, int yPosition) {
         if (!stack.isEmpty() && stack.isItemDamaged()) {
             GlStateManager.disableLighting();
             GlStateManager.disableDepth();
@@ -31,9 +33,9 @@ public class RenderItemMixin {
             GlStateManager.scale(0.5F, 0.5F, 0.5F);
 
             // ItemStack information
-            int damage = stack.getItemDamage();
-            int maxDamage = stack.getMaxDamage();
             int unbreaking = EnchantmentHelper.getEnchantmentLevel(Enchantments.UNBREAKING, stack);
+            int maxDamage = stack.getMaxDamage();
+            int damage = stack.getItemDamage();
 
             // Create string, position, and color
             String string = format(((maxDamage - damage) * (unbreaking + 1)));
@@ -54,6 +56,7 @@ public class RenderItemMixin {
         }
     }
 
+    @Unique
     public String format(float number) {
         DecimalFormat decimalFormat = new DecimalFormat("0.#");
 

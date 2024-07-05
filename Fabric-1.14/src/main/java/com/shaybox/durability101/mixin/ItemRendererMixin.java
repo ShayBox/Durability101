@@ -8,6 +8,7 @@ import net.minecraft.enchantment.Enchantments;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.MathHelper;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -18,32 +19,33 @@ import java.text.DecimalFormat;
 public class ItemRendererMixin {
 
 	@Inject(at = @At("RETURN"), method = "renderGuiItemOverlay(Lnet/minecraft/client/font/TextRenderer;Lnet/minecraft/item/ItemStack;IILjava/lang/String;)V")
-	public void renderGuiItemOverlay(TextRenderer fontRenderer, ItemStack stack, int x, int y, String amountText, CallbackInfo ci) {
-		renderDurability101(fontRenderer, stack, x, y);
+	public void renderGuiItemOverlay(TextRenderer textRenderer, ItemStack itemStack, int x, int y, String amountText, CallbackInfo ci) {
+		renderDurability101(textRenderer, itemStack, x, y);
 	}
 
-	public void renderDurability101(TextRenderer fontRenderer, ItemStack stack, int xPosition, int yPosition) {
-		if (!stack.isEmpty() && stack.isDamaged()) {
+	@Unique
+	public void renderDurability101(TextRenderer textRenderer, ItemStack itemStack, int xPosition, int yPosition) {
+		if (!itemStack.isEmpty() && itemStack.isDamaged()) {
 			GlStateManager.disableLighting();
 			GlStateManager.disableDepthTest();
 			GlStateManager.disableBlend();
 			GlStateManager.scalef(0.5F, 0.5F, 0.5F);
 
 			// ItemStack information
-			float damage = stack.getDamage();
-			float maxDamage = stack.getMaxDamage();
-			int unbreaking = EnchantmentHelper.getLevel(Enchantments.UNBREAKING, stack);
+			int unbreaking = EnchantmentHelper.getLevel(Enchantments.UNBREAKING, itemStack);
+			float maxDamage = itemStack.getMaxDamage();
+			float damage = itemStack.getDamage();
 
 			// Create string, position, and color
 			String string = format(((maxDamage - damage) * (unbreaking + 1)));
-			int stringWidth = fontRenderer.getStringWidth(string);
+			int stringWidth = textRenderer.getStringWidth(string);
 			int x = ((xPosition + 8) * 2 + 1 + stringWidth / 2 - stringWidth);
 			int y = (yPosition * 2) + 18;
 			float hue = Math.max(0.0F, (maxDamage - damage) / maxDamage);
 			int color = MathHelper.hsvToRgb(hue / 3.0F, 1.0F, 1.0F);
 
 			// Draw string
-			fontRenderer.drawWithShadow(string, x, y, color);
+			textRenderer.drawWithShadow(string, x, y, color);
 
 			GlStateManager.scalef(2.0F, 2.0F, 2.0F);
 			GlStateManager.enableBlend();
@@ -52,6 +54,7 @@ public class ItemRendererMixin {
 		}
 	}
 
+	@Unique
 	public String format(float number) {
 		DecimalFormat decimalFormat = new DecimalFormat("0.#");
 

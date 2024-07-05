@@ -29,7 +29,7 @@
 | 1.19.2    | [Decorator] |
 | 1.19.3    | [Decorator] |
 | 1.19.4    | [Decorator] |
-| 1.20-5    | [Decorator] |
+| 1.20-6    | [Decorator] |
 
 ### Notes
 - 1.16.4 and below requires Java 8 312
@@ -52,6 +52,7 @@
 | 1.19.3    | [Mixin] |
 | 1.19.4    | [Mixin] |
 | 1.20-6    | [Mixin] |
+| 1.21-0    | [Mixin] |
 
 ### Notes
 - 1.16.4 and below requires Java 8

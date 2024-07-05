@@ -21,7 +21,7 @@ do
 
         # Detect java version
         case $dir in
-            Fabric-1.20)
+            Fabric-1.20 | Fabric-1.21)
                 export PATH="/usr/lib/jvm/java-21-openjdk/bin/:$PATH"
                 ;;
             *)
