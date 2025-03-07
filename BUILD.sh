@@ -16,16 +16,19 @@ do
     # Check if gradlew script exists
     if [ -f "gradlew" ]
     then
+        # Clean
+        rm -rf .gradle
+
         # Strip trailing /
         dir=${dir%*/}
 
         # Detect java version
         case $dir in
-            Fabric-1.20 | Fabric-1.21)
-                export PATH="/usr/lib/jvm/java-21-openjdk/bin/:$PATH"
+            Fabric-1.20-6 | Fabric-1.21-1 | Fabric-1.21.2-4 | Forge-1.20-6 | Forge-1.21-2 | Forge-1.21.2-4)
+                export PATH="/usr/lib/jvm/java-21-temurin/bin/:$PATH"
                 ;;
             *)
-                export PATH="/usr/lib/jvm/java-17-openjdk/bin/:$PATH"
+                export PATH="/usr/lib/jvm/java-17-temurin/bin/:$PATH"
                 ;;
         esac
 
@@ -45,7 +48,7 @@ do
         mv build/libs/durability101-"${version}".jar ../Build/Durability101-"${dir,,}"-"${version}".jar
 
         # Cleanup
-        rm -rf .gradle .idea .vscode build logs run
+        rm -rf .idea .vscode build logs run
     fi
 
     # Navigate back to the parent directory

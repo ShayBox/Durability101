@@ -1,0 +1,11 @@
+{
+  "required": true,
+  "package": "com.shaybox.durability101.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "client": [
+    "ItemRendererMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
