@@ -30,13 +30,15 @@
 | 1.19.4    | [Mixin] |
 | 1.20-6    | [Mixin] |
 | 1.21-1    | [Mixin] |
-| 1.21.2-4  | [Mixin] |
+| 1.21.2-5  | [Mixin] |
+| 1.21.6-11 | [Mixin] |
 
 ### Notes
 
 - 1.16.4 and below requires Java 8
 - 1.20.4 and below requires Java 17
 - 1.20.5 and above requires Java 21
+- 1.26.1 and above requires Java 25
 
 ## Forge
 
