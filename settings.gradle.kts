@@ -55,6 +55,7 @@ extensions.configure<StonecutterSettingsExtension>("stonecutter") {
         vers("forge-1.20-6", "1.20.4")
         vers("forge-1.21-1", "1.21")
         vers("forge-1.21.3-5", "1.21.3")
-        vers("forge-1.21.6", "1.21.6")
+        vers("forge-1.21.6-8", "1.21.6")
+        vers("forge-1.21.9", "1.21.9")
     }
 }
