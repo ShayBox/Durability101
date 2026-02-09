@@ -59,7 +59,10 @@
 | 1.19.3    | [Decorator] |
 | 1.19.4    | [Decorator] |
 | 1.20-6    | [Decorator] |
-| 1.21+     | Unsupported |
+| 1.21-1    | [Decorator] |
+| 1.20.3-5  | [Decorator] |
+| 1.20.6-8  | [Decorator] |
+| 1.20.9-11 | [Decorator] |
 
 ### Notes
 
@@ -68,7 +71,7 @@
 - 1.19.2 requires FML 43.1 or use 1.19-2
 - 1.20.4 and below requires Java 17
 - 1.20.5 and above requires Java 21
-- 1.21+ Unsupported, [Decorator]s are broken
+- 1.26.1 and above requires Java 25
 
 ## NeoForge
 
