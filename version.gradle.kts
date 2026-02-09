@@ -222,7 +222,7 @@ if (project == rootProject) {
             }
         }
 
-        if (minecraftVersion == "1.21") {
+        if (minecraftVersion.startsWith("1.21")) {
             tasks.matching { it.name == "reobfJar" }.configureEach { enabled = false }
             tasks.matching { it.name == "reobfJarJar" }.configureEach { enabled = false }
         }
