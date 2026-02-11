@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.shaybox.durability101",
+  "refmap": "durability101.refmap.json",
+  "compatibilityLevel": "JAVA_${java_version}",
+  "client": [
+    "Durability101Mixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

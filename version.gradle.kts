@@ -36,6 +36,9 @@ if (project == rootProject) {
 
     val currentProject = stonecutter.current.project
 
+    fun requireProp(name: String): String = findProperty(name)?.toString()
+            ?: throw GradleException("Missing required property '$name' in $currentProject")
+
     val versionDir = rootProject.file("versions/$currentProject")
     if (!versionDir.exists()) throw GradleException("Missing version directory: $versionDir")
 
@@ -47,12 +50,10 @@ if (project == rootProject) {
 
     if (!isFabric && !isForge) throw GradleException("Unknown loader for $currentProject")
 
-    val javaVersion = (findProperty("java_version") ?: "17").toString().toInt()
+    val javaVersion = requireProp("java_version").toInt()
     val toolchainService = extensions.getByType(JavaToolchainService::class.java)
     val skipBuild = findProperty("skip_build").toString().toBoolean()
-    val modId = (findProperty("mod_id")
-        ?: findProperty("archives_base_name")
-        ?: "durability101").toString()
+    val modId = requireProp("mod_id")
 
     findProperty("maven_group")?.let { group = it }
         ?: findProperty("mod_group_id")?.let { group = it }
@@ -60,7 +61,7 @@ if (project == rootProject) {
     findProperty("mod_version")?.let { version = it }
 
     base {
-        archivesName.set((findProperty("archives_base_name") ?: modId).toString())
+        archivesName.set(modId)
     }
 
     if (skipBuild) tasks.configureEach { enabled = false }
@@ -101,17 +102,10 @@ if (project == rootProject) {
         duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     }
 
-    val splitEnv = findProperty("split_env").toString().toBoolean()
-
     val sourceSets = extensions.getByType(SourceSetContainer::class.java)
     sourceSets.named("main") {
         java.srcDir(versionDir.resolve("src/main/java"))
         resources.srcDir(versionDir.resolve("src/main/resources"))
-    }
-
-    if (isFabric && splitEnv) sourceSets.matching { it.name == "client" }.configureEach {
-        java.srcDir(versionDir.resolve("src/client/java"))
-        resources.srcDir(versionDir.resolve("src/client/resources"))
     }
 
     if (isForge) sourceSets.named("main") {
@@ -119,17 +113,10 @@ if (project == rootProject) {
     }
 
     if (isFabric) {
-        if (splitEnv) extensions.configure<ExtensionAware>("loom") {
-            withGroovyBuilder {
-                "splitEnvironmentSourceSets"()
-                "mods" {
-                    "create"(modId) {
-                        "sourceSet"(sourceSets["main"])
-                        "sourceSet"(sourceSets["client"])
-                    }
-                }
-            }
-        }
+        val modName = property("mod_name").toString()
+        val modLicense = property("mod_license").toString()
+        val modAuthors = property("mod_authors").toString()
+        val modDescription = property("mod_description").toString()
 
         dependencies {
             add("minecraft", "com.mojang:minecraft:${property("minecraft_version")}")
@@ -138,9 +125,17 @@ if (project == rootProject) {
         }
 
         tasks.named<ProcessResources>("processResources").configure {
-            inputs.property("version", project.version)
-            filesMatching("fabric.mod.json") {
-                expand("version" to project.version)
+            val replaceProperties = mapOf(
+                "java_version" to javaVersion.toString(),
+                "mod_name" to modName,
+                "mod_license" to modLicense,
+                "mod_authors" to modAuthors,
+                "mod_description" to modDescription,
+                "version" to project.version.toString(),
+            )
+            inputs.properties(replaceProperties)
+            filesMatching(listOf("fabric.mod.json", "durability101.mixins.json")) {
+                expand(replaceProperties)
             }
         }
     }
@@ -148,8 +143,9 @@ if (project == rootProject) {
     if (isForge) {
         val forgeMixin = findProperty("forge_mixin").toString().toBoolean()
         val coremod = findProperty("forge_coremod")?.toString()
-        val mixinVersion = (findProperty("mixin_version") ?: "0.8.5").toString()
-        val copyIdeResources = (findProperty("forge_copy_ide_resources") ?: "true").toString().toBoolean()
+        val hasCoremodHooks = findProperty("coremod_target_class") != null
+
+        val mixinVersion = if (forgeMixin) requireProp("mixin_version") else null
 
         val mappingChannel = property("mapping_channel").toString()
         val mappingVersion = property("mapping_version").toString()
@@ -164,6 +160,11 @@ if (project == rootProject) {
         val modAuthors = property("mod_authors").toString()
         val modDescription = property("mod_description").toString()
 
+        val coremodTargetClass = if (hasCoremodHooks) requireProp("coremod_target_class") else null
+        val coremodObfMethod = if (hasCoremodHooks) requireProp("coremod_obf_method") else null
+        val coremodFontClass = if (hasCoremodHooks) requireProp("coremod_font_class") else null
+        val coremodItemStackClass = if (hasCoremodHooks) requireProp("coremod_itemstack_class") else null
+
         if (minecraftVersion == "1.18.2") {
             configurations.configureEach {
                 resolutionStrategy.force(
@@ -175,7 +176,7 @@ if (project == rootProject) {
 
         extensions.configure<ExtensionAware>("minecraft") {
             withGroovyBuilder {
-                if (copyIdeResources) setProperty("copyIdeResources", true)
+                setProperty("copyIdeResources", true)
                 "mappings"("channel" to mappingChannel, "version" to mappingVersion)
                 "runs" {
                     "create"("client") {
@@ -193,7 +194,7 @@ if (project == rootProject) {
             extensions.configure<ExtensionAware>("mixin") {
                 withGroovyBuilder {
                     "add"(sourceSets["main"], "mixin.durability101.refmap.json")
-                    "config"("mixin.durability101.json")
+                    "config"("durability101.mixins.json")
                 }
             }
 
@@ -228,7 +229,7 @@ if (project == rootProject) {
         }
 
         tasks.named<ProcessResources>("processResources").configure {
-            val replaceProperties = mapOf(
+            val replaceProperties = mutableMapOf(
                 "minecraft_version" to minecraftVersion,
                 "minecraft_version_range" to minecraftVersionRange,
                 "forge_version" to forgeVersion,
@@ -239,12 +240,36 @@ if (project == rootProject) {
                 "mod_license" to modLicense,
                 "mod_version" to modVersion,
                 "mod_authors" to modAuthors,
-                "mod_description" to modDescription
+                "mod_description" to modDescription,
+                "java_version" to javaVersion.toString(),
             )
+
+            if (hasCoremodHooks) {
+                replaceProperties["coremod_target_class"] = coremodTargetClass!!
+                replaceProperties["coremod_obf_method"] = coremodObfMethod!!
+                replaceProperties["coremod_font_class"] = coremodFontClass!!
+                replaceProperties["coremod_itemstack_class"] = coremodItemStackClass!!
+            }
+
             inputs.properties(replaceProperties)
 
-            val modsFile = (findProperty("forge_mods_file") ?: "META-INF/mods.toml").toString()
-            filesMatching(listOf(modsFile, "pack.mcmeta")) {
+            val modsFile = findProperty("forge_mods_file")?.toString() ?: "META-INF/mods.toml"
+            val filesToExpand = mutableListOf(modsFile, "META-INF/mods.toml")
+
+            if (hasCoremodHooks) {
+                filesToExpand += "ItemRenderer.js"
+                filesToExpand += "META-INF/coremods.json"
+            } else {
+                exclude("ItemRenderer.js", "META-INF/coremods.json")
+            }
+
+            if (forgeMixin) {
+                filesToExpand += "durability101.mixins.json"
+            } else {
+                exclude("durability101.mixins.json")
+            }
+
+            filesMatching(filesToExpand) {
                 expand(replaceProperties + mapOf("project" to project))
             }
         }
@@ -270,7 +295,7 @@ if (project == rootProject) {
                         mapOf(
                             "FMLCorePluginContainsFMLMod" to true,
                             "ForceLoadAsMod" to true,
-                            "MixinConfigs" to "mixin.durability101.json",
+                            "MixinConfigs" to "durability101.mixins.json",
                             "TweakClass" to "org.spongepowered.asm.launch.MixinTweaker"
                         )
                     )
